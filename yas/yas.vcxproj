@@ -66,11 +66,13 @@
   <ItemGroup>
     <ClCompile Include="allocate.c" />
     <ClCompile Include="error.c" />
+    <ClCompile Include="input.c" />
     <ClCompile Include="yas.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allocate.h" />
     <ClInclude Include="error.h" />
+    <ClInclude Include="input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

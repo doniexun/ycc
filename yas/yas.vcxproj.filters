@@ -24,12 +24,18 @@
     <ClCompile Include="allocate.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="input.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="error.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="allocate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
