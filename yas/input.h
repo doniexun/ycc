@@ -11,6 +11,8 @@ extern FILE* src;
 extern unsigned lineno;
 extern unsigned column;
 
+extern enum chartype ascii_map[];
+
 enum chartype{
 	DIGIT = 1 << 0,
 	OCT = 1 << 1,
@@ -22,6 +24,9 @@ enum chartype{
 	EOB = 1 << 7,
 	OTHER = 1 << 8
 };
+
+#define BUFFER_SIZE 2048
+#define MAXLINE 512
 
 #define CH_EOB 0
 

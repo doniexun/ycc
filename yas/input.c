@@ -1,10 +1,6 @@
 #include "error.h"
 #include "input.h"
 
-#define BUFFER_SIZE 2048
-#define MAXLINE 512
-
-
 static char buffer[BUFFER_SIZE + 1 + MAXLINE + 1];
 char *pc;
 char *line;
@@ -14,7 +10,7 @@ FILE *src;
 unsigned lineno;
 unsigned column;
 
-static int cmap[] = {
+static enum chartype ascii_map[] = {
 	EOB, /* 0 NUL */
 	OTHER, /* 1 SOH */
 	OTHER, /* 2 STX */
@@ -198,7 +194,7 @@ void newline()
 {
 	pc++;
 	while (1){
-		if (cmap[*pc] & BLANK){
+		if (ascii_map[*pc] & BLANK){
 			pc++;
 		}
 		else if (*pc == '\n'){
