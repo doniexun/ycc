@@ -17,6 +17,7 @@ enum token{
 	TOK_COLON,
 	TOK_INTEGER,
 	TOK_FLOAT,
+	TOK_STRING,
 	TOK_NEWLINE,
 	TOK_EOF
 };

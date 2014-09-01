@@ -1,12 +1,15 @@
 #include "error.h"
 #include "input.h"
+#include "allocate.h"
 
-static char buffer[BUFFER_SIZE + 1 + MAXLINE + 1];
+#include <assert.h>
+
+static char *pbuf;
 char *pc;
 char *line;
 char *limit;
 char *filepath;
-FILE *src;
+FILE *fsrc;
 unsigned lineno;
 unsigned column;
 
@@ -144,64 +147,24 @@ static enum chartype ascii_map[] = {
 
 int input_init()
 {
-	size_t cnt = 0;
-	src = fopen("filepath", "r");
+	size_t length = 0;
+	assert(fsrc);
+
+	/* get file length */
+	fsrc = fopen(filepath, "r");
 	if (!src){
-		fatal("file \"%s\" not exist.", filepath);
-		return -1;	/* avoid warning */
-	}
-	
-	cnt = fread(buffer + MAXLINE + 1, sizeof(char), BUFFER_SIZE, src);
-	if (!cnt){
-		fatal("file \"%s\" is empty.", filepath);
+		fatal("couldn't open file \" %s \"." ,filepath);
 		return -1;
 	}
+	fseek(fsrc, SEEK_END, 0);
+	length = ftell(fsrc);
 
-	pc = buffer + MAXLINE + 1;
-	line = pc;
-	limit = pc + cnt;
-	*limit = CH_EOB;
-	lineno = 1;	/* no need to initiate column, it's calculate when needed */
+	/* allocate input buffer, then copy whole file content to buffer */
+	pbuf = allocate(length + 1, 0);
+	pc = pbuf;
+	line = pbuf;
+	pbuf[length] = '\0';
+	lineno = 1; /* no need to initiate column 'cos it's calculate before token scanned */
 
 	return 0;
-}
-
-/*																								*\
-	when characters remained in buffer less than MAXLINE, move remained characters to the 
-	first MAXLINE bytes and make last byte placed in buffer + MAXLINE, then fill buffer with
-	maximum capacity 
-	ATTENTION: total of remaining characters is checked by CALLER
-\*																								*/
-void fillbuf()
-{
-	/* move remaining characters to the front */
-	char *p = buffer + MAXLINE + 1 - (limit - pc);
-	int cnt = 0;
-	while (pc != limit){
-		*p++ = *pc++;
-	}
-
-	/* refill buffer */
-	cnt = fread(p, sizeof(char), BUFFER_SIZE, src);
-	limit = p + cnt;
-	*limit = CH_EOB;
-}
-
-/*																								*\
-	called when *pc is '\n', newline will skip spaces and '\n' until pc is a non-blank character 
-\*																								*/
-void newline()
-{
-	pc++;
-	while (1){
-		if (ascii_map[*pc] & BLANK){
-			pc++;
-		}
-		else if (*pc == '\n'){
-			newline();
-		}
-		else
-			break;
-	}
-	lineno++;
 }

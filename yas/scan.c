@@ -13,7 +13,7 @@ unsigned size;	/* specify oprand size */
 enum numtype type;
 long l;
 double d;
-char *s;
+char s[BUFFER_SIZE];
 
 
 #define MAXTOKEN 32
@@ -25,7 +25,9 @@ static enum token get_directive()
 /* return an instruction, identifier or register*/
 static enum token get_name()
 {
-
+	while (ascii_map[*pc] & (DIGIT | LETTER)){
+		pc++;
+	}
 }
 
 static enum token get_hex()
@@ -92,18 +94,19 @@ static enum token get_oct()
 	l = ret;
 }
 
+static enum token get_string()
+{
+	return TOK_STRING;
+}
 
 enum token get_token()
 {
 	register char *rpc = pc;
-	while (ascii_map[*rpc] & BLANK){
-		rpc++;
-	}
+	SKIP_BLANK(rpc);
 	
 	column = pc - line + 1;
-	if (limit - pc < MAXTOKEN){
-		fillbuf();
-	}
+
+	
 	switch (*pc){
 	case '.':{
 		if (rpc[1] & DIGIT){
@@ -144,6 +147,9 @@ enum token get_token()
 	case '%':{
 		return TOK_MOD;
 	}
+	case '"':{
+		return 
+	}
 	case 'a': case 'b': case 'c': case 'd': case 'e':
 	case 'f': case 'g': case 'h': case 'i': case 'j':
 	case 'k': case 'l': case 'm': case 'n': case 'o':
@@ -156,6 +162,7 @@ enum token get_token()
 	case 'P': case 'Q': case 'R': case 'S': case 'T':
 	case 'U': case 'V': case 'W': case 'X': case 'Y':
 	case 'Z':{
+		pc = rpc;
 		return get_name();
 	}
 	case '0':{

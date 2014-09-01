@@ -2,6 +2,7 @@
 #define INPUT_H_
 
 #include <stdio.h>
+#include <assert.h>
 
 extern char *pc;
 extern char *line;
@@ -24,6 +25,15 @@ enum chartype{
 	EOB = 1 << 7,
 	OTHER = 1 << 8
 };
+
+extern int input_init();
+
+/* skip blank characters */
+#define SKIP_BLANK(p)	\
+	assert(ascii_map[*p] & BLANK);\
+	do{\
+		p++;\
+	} while (ascii_map[*p] & BLANK)
 
 #define BUFFER_SIZE 2048
 #define MAXLINE 512

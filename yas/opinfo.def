@@ -1,0 +1,12 @@
+#define OP
+OP(mov)
+OP(cmov)
+OP(xchg)
+OP(bswap)
+OP(xadd)
+OP(cmpxchg)
+OP(cmpxchg8b)
+OP(cmpxchg16b)
+
+OP(add)
+OP
