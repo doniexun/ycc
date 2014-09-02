@@ -15,8 +15,14 @@ long l;
 double d;
 char s[BUFFER_SIZE];
 
-
 #define MAXTOKEN 32
+
+#define FA 99
+
+void scan_init()
+{
+
+}
 
 static enum token get_directive()
 {
@@ -148,7 +154,7 @@ enum token get_token()
 		return TOK_MOD;
 	}
 	case '"':{
-		return 
+		return 0;
 	}
 	case 'a': case 'b': case 'c': case 'd': case 'e':
 	case 'f': case 'g': case 'h': case 'i': case 'j':

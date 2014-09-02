@@ -65,14 +65,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="allocate.c" />
+    <ClCompile Include="atom.c" />
     <ClCompile Include="error.c" />
+    <ClCompile Include="hashtab.c" />
     <ClCompile Include="input.c" />
     <ClCompile Include="scan.c" />
     <ClCompile Include="yas.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allocate.h" />
+    <ClInclude Include="atom.h" />
     <ClInclude Include="error.h" />
+    <ClInclude Include="hashtab.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="scan.h" />
   </ItemGroup>
