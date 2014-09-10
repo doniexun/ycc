@@ -1,5 +1,6 @@
 #include "scan.h"
 #include "input.h"
+#include "hashtab.h"
 
 #include <stdlib.h>
 
@@ -8,20 +9,43 @@ enum token tok;
 unsigned type;	/* specify the instruction or prefix used */
 unsigned size;	/* specify oprand size */
 
-/* lex value */
-
+/* lexical value */
 enum numtype type;
 long l;
 double d;
 char s[BUFFER_SIZE];
 
-#define MAXTOKEN 32
+/* hashtable for instruction mnenomic matching */
+static hashtab *mnenomics;
 
-#define FA 99
+enum instr_type {
+#define OP(a) INSTR_##a,	/* add a "TOK_" prefix to avoid keyword instruction like "int" */
+#define REG(a)
+#include "instrinfo.def"
+#undef OP
+#undef REG
+};
+
+struct instr_template {
+	enum instr_type type;
+	const char *mnenomic;
+} instr_template_list[] = {
+#define OP(a) { TOK ## a, #a },
+#define REG(a) 
+#include "instrinfo.def"
+#undef OP
+#undef REG
+};
 
 void scan_init()
 {
-
+	mnenomics = hashtab_new();
+	int i = 0;
+	struct instr_template *p = instr_template_list;
+	while (p->type != INSTR_LAST){
+		hashtab_insert(mnenomics, p->mnenomic, p);
+		p++;
+	}
 }
 
 static enum token get_directive()
